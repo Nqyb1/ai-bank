@@ -8,7 +8,6 @@
 
     <link rel="stylesheet" href="style.css">
 
-    <!-- TensorFlow.js -->
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.22.0/dist/tf.min.js"></script>
 </head>
 
@@ -61,38 +60,179 @@
             أدخل آخر 5 نسب من الأقدم إلى الأحدث
         </p>
 
-        <input id="p1" type="number"
-               min="0" max="100"
-               placeholder="1 - الأقدم">
 
-        <input id="p2" type="number"
-               min="0" max="100"
-               placeholder="2">
+        <!-- النسبة الأولى -->
 
-        <input id="p3" type="number"
-               min="0" max="100"
-               placeholder="3">
+        <div class="percentage-row">
 
-        <input id="p4" type="number"
-               min="0" max="100"
-               placeholder="4">
+            <input
+                id="p1"
+                type="number"
+                min="0"
+                max="100"
+                placeholder="1 - الأقدم"
+            >
 
-        <input id="p5" type="number"
-               min="0" max="100"
-               placeholder="5 - الأحدث">
+            <select id="r1">
+
+                <option value="">
+                    النتيجة
+                </option>
+
+                <option value="ناجح">
+                    ✅ ناجح
+                </option>
+
+                <option value="خاسر">
+                    ❌ خاسر
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <!-- النسبة الثانية -->
+
+        <div class="percentage-row">
+
+            <input
+                id="p2"
+                type="number"
+                min="0"
+                max="100"
+                placeholder="2"
+            >
+
+            <select id="r2">
+
+                <option value="">
+                    النتيجة
+                </option>
+
+                <option value="ناجح">
+                    ✅ ناجح
+                </option>
+
+                <option value="خاسر">
+                    ❌ خاسر
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <!-- النسبة الثالثة -->
+
+        <div class="percentage-row">
+
+            <input
+                id="p3"
+                type="number"
+                min="0"
+                max="100"
+                placeholder="3"
+            >
+
+            <select id="r3">
+
+                <option value="">
+                    النتيجة
+                </option>
+
+                <option value="ناجح">
+                    ✅ ناجح
+                </option>
+
+                <option value="خاسر">
+                    ❌ خاسر
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <!-- النسبة الرابعة -->
+
+        <div class="percentage-row">
+
+            <input
+                id="p4"
+                type="number"
+                min="0"
+                max="100"
+                placeholder="4"
+            >
+
+            <select id="r4">
+
+                <option value="">
+                    النتيجة
+                </option>
+
+                <option value="ناجح">
+                    ✅ ناجح
+                </option>
+
+                <option value="خاسر">
+                    ❌ خاسر
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <!-- النسبة الخامسة -->
+
+        <div class="percentage-row">
+
+            <input
+                id="p5"
+                type="number"
+                min="0"
+                max="100"
+                placeholder="5 - الأحدث"
+            >
+
+            <select id="r5">
+
+                <option value="">
+                    النتيجة
+                </option>
+
+                <option value="ناجح">
+                    ✅ ناجح
+                </option>
+
+                <option value="خاسر">
+                    ❌ خاسر
+                </option>
+
+            </select>
+
+        </div>
 
 
         <button onclick="predict()">
             🤖 توقع بالذكاء الاصطناعي
         </button>
 
-        <button class="secondary"
-                onclick="showHistory()">
+
+        <button
+            class="secondary"
+            onclick="showHistory()"
+        >
             📊 سجل هذا الأصل
         </button>
 
-        <button class="back"
-                onclick="showAssets()">
+
+        <button
+            class="back"
+            onclick="showAssets()"
+        >
             ← رجوع
         </button>
 
@@ -117,18 +257,24 @@
             بعد معرفة النتيجة الحقيقية، سجلها حتى يتعلم النموذج.
         </p>
 
-        <button class="success"
-                onclick="recordResult('ناجح')">
+        <button
+            class="success"
+            onclick="recordResult('ناجح')"
+        >
             ✅ ناجح
         </button>
 
-        <button class="danger"
-                onclick="recordResult('خاسر')">
+        <button
+            class="danger"
+            onclick="recordResult('خاسر')"
+        >
             ❌ خاسر
         </button>
 
-        <button class="back"
-                onclick="showInput()">
+        <button
+            class="back"
+            onclick="showInput()"
+        >
             ← رجوع
         </button>
 
@@ -139,12 +285,16 @@
 
     <section id="history" class="hidden">
 
-        <h2>سجل <span id="historyAsset"></span></h2>
+        <h2>
+            سجل <span id="historyAsset"></span>
+        </h2>
 
         <div id="historyList"></div>
 
-        <button class="back"
-                onclick="showInput()">
+        <button
+            class="back"
+            onclick="showInput()"
+        >
             ← رجوع
         </button>
 
