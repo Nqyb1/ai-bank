@@ -1,207 +1,552 @@
+/* ============================================================
+   CENTRAL BANK AI
+   Royal Black & Gold Theme
+   ============================================================ */
+
 * {
     box-sizing: border-box;
 }
 
+:root {
+    --black: #050505;
+    --black-2: #0b0b0b;
+    --black-3: #111111;
+    --gold: #d4af37;
+    --gold-light: #f4d675;
+    --gold-dark: #8f6d16;
+    --text: #f5f5f5;
+    --muted: #aaa;
+    --border: rgba(212, 175, 55, 0.28);
+}
+
 body {
     margin: 0;
+    min-height: 100vh;
+    font-family: Arial, Tahoma, sans-serif;
+    direction: rtl;
+
+    color: var(--text);
+
+    background:
+        radial-gradient(
+            circle at 50% -10%,
+            rgba(212, 175, 55, 0.14),
+            transparent 38%
+        ),
+        radial-gradient(
+            circle at 0% 100%,
+            rgba(212, 175, 55, 0.06),
+            transparent 35%
+        ),
+        linear-gradient(
+            145deg,
+            #020202,
+            #080808 45%,
+            #050505
+        );
 
     min-height: 100vh;
+}
 
-    font-family:
-        Arial,
-        Tahoma,
-        sans-serif;
+
+/* ============================================================
+   الحاوية الرئيسية
+   ============================================================ */
+
+.container {
+    width: min(92%, 700px);
+    margin: 40px auto;
+    padding: 30px 24px;
 
     background:
         linear-gradient(
-            135deg,
-            #050505,
-            #181818
+            145deg,
+            rgba(18, 18, 18, 0.98),
+            rgba(5, 5, 5, 0.98)
         );
 
-    color: white;
+    border: 1px solid var(--border);
+    border-radius: 24px;
+
+    box-shadow:
+        0 25px 80px rgba(0, 0, 0, 0.75),
+        0 0 35px rgba(212, 175, 55, 0.06);
 }
 
 
-.app {
-    width: 92%;
+/* ============================================================
+   العنوان
+   ============================================================ */
 
-    max-width: 600px;
+h1 {
+    margin: 0 0 8px;
 
-    margin: 40px auto;
+    text-align: center;
 
-    padding: 30px;
+    font-size: 38px;
+    font-weight: 900;
+    letter-spacing: 1px;
 
-    background: #181818;
+    color: var(--gold-light);
 
-    border-radius: 18px;
+    text-shadow:
+        0 0 12px rgba(212, 175, 55, 0.3);
+}
 
-    box-shadow:
-        0 15px 50px
-        rgba(0,0,0,.5);
+h2 {
+    text-align: center;
 
+    color: var(--gold-light);
+
+    margin: 15px 0 25px;
+}
+
+h3 {
+    text-align: center;
+    color: var(--gold);
+}
+
+
+/* ============================================================
+   النصوص
+   ============================================================ */
+
+p {
+    color: #d0d0d0;
     text-align: center;
 }
 
+label {
+    display: block;
 
-h1 {
-    margin-bottom: 5px;
+    margin: 12px 0 6px;
+
+    color: var(--gold-light);
+    font-weight: bold;
 }
 
 
-.subtitle {
-    color: #999;
-
-    margin-bottom: 30px;
-}
-
+/* ============================================================
+   الأزرار العامة
+   ============================================================ */
 
 button {
     width: 100%;
 
-    padding: 15px;
+    padding: 15px 18px;
 
-    margin: 7px 0;
+    margin: 8px 0;
 
-    border: none;
+    border: 1px solid rgba(212, 175, 55, 0.35);
+    border-radius: 14px;
 
-    border-radius: 10px;
+    background:
+        linear-gradient(
+            145deg,
+            #151515,
+            #090909
+        );
 
-    background: #303030;
+    color: #f5f5f5;
 
-    color: white;
-
-    font-size: 17px;
+    font-size: 16px;
+    font-weight: 700;
 
     cursor: pointer;
 
-    transition: .2s;
+    transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        color 0.2s ease,
+        background 0.2s ease;
 }
-
 
 button:hover {
-    background: #444;
+    transform: translateY(-2px);
 
-    transform:
-        translateY(-1px);
+    border-color: var(--gold);
+
+    color: var(--gold-light);
+
+    box-shadow:
+        0 8px 25px rgba(0, 0, 0, 0.5),
+        0 0 18px rgba(212, 175, 55, 0.12);
 }
 
+button:active {
+    transform: scale(0.98);
+}
+
+
+/* ============================================================
+   أزرار الصفحة الرئيسية
+   ============================================================ */
+
+#home button {
+    border-color: rgba(212, 175, 55, 0.45);
+}
+
+#home button:first-of-type {
+    background:
+        linear-gradient(
+            135deg,
+            #1a1507,
+            #0b0b0b
+        );
+}
+
+
+/* ============================================================
+   أزرار الشركات
+   ============================================================ */
+
+.asset {
+    position: relative;
+
+    overflow: hidden;
+
+    text-align: center;
+
+    background:
+        linear-gradient(
+            145deg,
+            #141414,
+            #080808
+        );
+
+    border: 1px solid rgba(212, 175, 55, 0.25);
+}
+
+.asset::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    right: 0;
+
+    width: 3px;
+    height: 100%;
+
+    background:
+        linear-gradient(
+            to bottom,
+            transparent,
+            var(--gold),
+            transparent
+        );
+
+    opacity: 0.7;
+}
+
+.asset:hover {
+    background:
+        linear-gradient(
+            145deg,
+            #1a180f,
+            #0b0b0b
+        );
+
+    border-color: var(--gold);
+
+    box-shadow:
+        0 0 20px rgba(212, 175, 55, 0.12);
+}
+
+
+/* ============================================================
+   حقول النسب
+   ============================================================ */
 
 input {
     width: 100%;
 
-    padding: 14px;
+    padding: 16px;
 
     margin: 6px 0;
 
-    border:
-        1px solid
-        #333;
+    border-radius: 12px;
 
-    border-radius: 9px;
+    border: 1px solid rgba(212, 175, 55, 0.25);
 
-    background: #0c0c0c;
+    outline: none;
+
+    background: #080808;
 
     color: white;
 
-    font-size: 16px;
-
     text-align: center;
-}
 
-
-input:focus {
-    outline: none;
-
-    border-color: #777;
-}
-
-
-.hidden {
-    display: none;
-}
-
-
-.back {
-    background: #151515;
-
-    color: #aaa;
-}
-
-
-.secondary {
-    background: #222;
-}
-
-
-.success {
-    background: #164b32;
-}
-
-
-.danger {
-    background: #5a2020;
-}
-
-
-.asset {
-    background: #222;
-
-    border:
-        1px solid
-        #333;
-}
-
-
-#prediction {
-    font-size: 32px;
-
+    font-size: 18px;
     font-weight: bold;
 
-    margin: 25px 0;
+    transition:
+        border-color 0.2s,
+        box-shadow 0.2s;
 }
 
+input:focus {
+    border-color: var(--gold);
+
+    box-shadow:
+        0 0 15px rgba(212, 175, 55, 0.12);
+}
+
+input::placeholder {
+    color: #777;
+}
+
+
+/* ============================================================
+   زر الذكاء الاصطناعي
+   ============================================================ */
+
+#predict,
+button[onclick*="predict"] {
+    margin-top: 18px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #d4af37,
+            #a98220
+        );
+
+    color: #050505;
+
+    border: none;
+
+    font-weight: 900;
+
+    box-shadow:
+        0 8px 25px rgba(212, 175, 55, 0.18);
+}
+
+#predict:hover,
+button[onclick*="predict"]:hover {
+    background:
+        linear-gradient(
+            135deg,
+            #f4d675,
+            #c59d2d
+        );
+
+    color: #050505;
+
+    box-shadow:
+        0 10px 35px rgba(212, 175, 55, 0.28);
+}
+
+
+/* ============================================================
+   نتيجة التوقع
+   ============================================================ */
+
+#prediction {
+    margin: 25px 0 12px;
+
+    padding: 22px;
+
+    border-radius: 18px;
+
+    text-align: center;
+
+    font-size: 28px;
+    font-weight: 900;
+
+    background: #090909;
+
+    border: 1px solid var(--border);
+}
 
 .win {
-    color: #42d392;
-}
+    color: #e5c75a !important;
 
+    border-color:
+        rgba(212, 175, 55, 0.65) !important;
+
+    box-shadow:
+        0 0 25px rgba(212, 175, 55, 0.12);
+}
 
 .loss {
-    color: #ff6565;
+    color: #d8d8d8 !important;
+
+    border-color:
+        rgba(150, 150, 150, 0.35) !important;
 }
 
 
-.info {
-    color: #aaa;
+/* ============================================================
+   الثقة والمعلومات
+   ============================================================ */
 
-    font-size: 15px;
+#confidence {
+    text-align: center;
 
-    line-height: 1.8;
+    color: var(--gold-light);
+
+    font-size: 18px;
+    font-weight: bold;
+
+    margin: 12px 0;
 }
 
+#modelInfo {
+    text-align: center;
+
+    color: #999;
+
+    font-size: 14px;
+}
+
+
+/* ============================================================
+   سجل النتائج
+   ============================================================ */
 
 .history-item {
-    background: #222;
+    margin: 12px 0;
 
-    padding: 14px;
+    padding: 18px;
 
-    margin: 8px 0;
+    background:
+        linear-gradient(
+            145deg,
+            #121212,
+            #080808
+        );
 
-    border-radius: 9px;
+    border: 1px solid rgba(212, 175, 55, 0.2);
 
-    text-align: right;
+    border-radius: 16px;
 
-    line-height: 1.8;
+    color: #ddd;
+
+    line-height: 1.9;
+}
+
+.history-item strong {
+    color: var(--gold-light);
 }
 
 
-hr {
-    border: 0;
+/* ============================================================
+   زر الرجوع
+   ============================================================ */
 
-    border-top:
-        1px solid
-        #333;
+.back,
+button[onclick*="showHome"],
+button[onclick*="showAssets"],
+button[onclick*="showInput"] {
+    background: #090909;
+
+    color: #aaa;
+
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
+.back:hover,
+button[onclick*="showHome"]:hover,
+button[onclick*="showAssets"]:hover,
+button[onclick*="showInput"]:hover {
+    color: var(--gold-light);
+
+    border-color:
+        rgba(212, 175, 55, 0.35);
+}
+
+
+/* ============================================================
+   إخفاء الصفحات
+   ============================================================ */
+
+.hidden {
+    display: none !important;
+}
+
+
+/* ============================================================
+   خط ذهبي زخرفي
+   ============================================================ */
+
+hr {
+    border: none;
+
+    height: 1px;
 
     margin: 25px 0;
+
+    background:
+        linear-gradient(
+            to right,
+            transparent,
+            var(--gold),
+            transparent
+        );
+
+    opacity: 0.5;
+}
+
+
+/* ============================================================
+   Scrollbar
+   ============================================================ */
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #050505;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #6f5718;
+
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--gold);
+}
+
+
+/* ============================================================
+   الجوال
+   ============================================================ */
+
+@media (max-width: 600px) {
+
+    .container {
+        width: 94%;
+
+        margin: 20px auto;
+
+        padding: 24px 16px;
+
+        border-radius: 20px;
+    }
+
+    h1 {
+        font-size: 30px;
+    }
+
+    h2 {
+        font-size: 21px;
+    }
+
+    button {
+        padding: 14px;
+    }
+
+    input {
+        font-size: 17px;
+    }
+
+    #prediction {
+        font-size: 23px;
+    }
+
 }
