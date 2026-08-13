@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Central Bank AI</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <!-- TensorFlow.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.22.0/dist/tf.min.js"></script>
+</head>
+
+<body>
+
+<div class="app">
+
+    <h1>Central Bank AI</h1>
+    <p class="subtitle">نظام التوقع الذكي</p>
+
+    <!-- ================= HOME ================= -->
+
+    <section id="home">
+
+        <h2>اختر النظام</h2>
+
+        <button onclick="chooseType('trading')">
+            💹 تداول
+        </button>
+
+        <button onclick="chooseType('investment')">
+            📈 استثمار
+        </button>
+
+    </section>
+
+
+    <!-- ================= ASSETS ================= -->
+
+    <section id="assets" class="hidden">
+
+        <h2 id="assetTitle"></h2>
+
+        <div id="assetButtons"></div>
+
+        <button class="back" onclick="showHome()">
+            ← رجوع
+        </button>
+
+    </section>
+
+
+    <!-- ================= INPUT ================= -->
+
+    <section id="input" class="hidden">
+
+        <h2 id="selectedAsset"></h2>
+
+        <p>
+            أدخل آخر 5 نسب من الأقدم إلى الأحدث
+        </p>
+
+        <input id="p1" type="number"
+               min="0" max="100"
+               placeholder="1 - الأقدم">
+
+        <input id="p2" type="number"
+               min="0" max="100"
+               placeholder="2">
+
+        <input id="p3" type="number"
+               min="0" max="100"
+               placeholder="3">
+
+        <input id="p4" type="number"
+               min="0" max="100"
+               placeholder="4">
+
+        <input id="p5" type="number"
+               min="0" max="100"
+               placeholder="5 - الأحدث">
+
+
+        <button onclick="predict()">
+            🤖 توقع بالذكاء الاصطناعي
+        </button>
+
+        <button class="secondary"
+                onclick="showHistory()">
+            📊 سجل هذا الأصل
+        </button>
+
+        <button class="back"
+                onclick="showAssets()">
+            ← رجوع
+        </button>
+
+    </section>
+
+
+    <!-- ================= RESULT ================= -->
+
+    <section id="result" class="hidden">
+
+        <h2>نتيجة التوقع</h2>
+
+        <div id="prediction"></div>
+
+        <div id="confidence"></div>
+
+        <div id="modelInfo"></div>
+
+        <hr>
+
+        <p>
+            بعد معرفة النتيجة الحقيقية، سجلها حتى يتعلم النموذج.
+        </p>
+
+        <button class="success"
+                onclick="recordResult('ناجح')">
+            ✅ ناجح
+        </button>
+
+        <button class="danger"
+                onclick="recordResult('خاسر')">
+            ❌ خاسر
+        </button>
+
+        <button class="back"
+                onclick="showInput()">
+            ← رجوع
+        </button>
+
+    </section>
+
+
+    <!-- ================= HISTORY ================= -->
+
+    <section id="history" class="hidden">
+
+        <h2>سجل <span id="historyAsset"></span></h2>
+
+        <div id="historyList"></div>
+
+        <button class="back"
+                onclick="showInput()">
+            ← رجوع
+        </button>
+
+    </section>
+
+</div>
+
+
+<script src="script.js"></script>
+
+</body>
+</html>

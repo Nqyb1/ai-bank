@@ -1,0 +1,207 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+
+    min-height: 100vh;
+
+    font-family:
+        Arial,
+        Tahoma,
+        sans-serif;
+
+    background:
+        linear-gradient(
+            135deg,
+            #050505,
+            #181818
+        );
+
+    color: white;
+}
+
+
+.app {
+    width: 92%;
+
+    max-width: 600px;
+
+    margin: 40px auto;
+
+    padding: 30px;
+
+    background: #181818;
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 15px 50px
+        rgba(0,0,0,.5);
+
+    text-align: center;
+}
+
+
+h1 {
+    margin-bottom: 5px;
+}
+
+
+.subtitle {
+    color: #999;
+
+    margin-bottom: 30px;
+}
+
+
+button {
+    width: 100%;
+
+    padding: 15px;
+
+    margin: 7px 0;
+
+    border: none;
+
+    border-radius: 10px;
+
+    background: #303030;
+
+    color: white;
+
+    font-size: 17px;
+
+    cursor: pointer;
+
+    transition: .2s;
+}
+
+
+button:hover {
+    background: #444;
+
+    transform:
+        translateY(-1px);
+}
+
+
+input {
+    width: 100%;
+
+    padding: 14px;
+
+    margin: 6px 0;
+
+    border:
+        1px solid
+        #333;
+
+    border-radius: 9px;
+
+    background: #0c0c0c;
+
+    color: white;
+
+    font-size: 16px;
+
+    text-align: center;
+}
+
+
+input:focus {
+    outline: none;
+
+    border-color: #777;
+}
+
+
+.hidden {
+    display: none;
+}
+
+
+.back {
+    background: #151515;
+
+    color: #aaa;
+}
+
+
+.secondary {
+    background: #222;
+}
+
+
+.success {
+    background: #164b32;
+}
+
+
+.danger {
+    background: #5a2020;
+}
+
+
+.asset {
+    background: #222;
+
+    border:
+        1px solid
+        #333;
+}
+
+
+#prediction {
+    font-size: 32px;
+
+    font-weight: bold;
+
+    margin: 25px 0;
+}
+
+
+.win {
+    color: #42d392;
+}
+
+
+.loss {
+    color: #ff6565;
+}
+
+
+.info {
+    color: #aaa;
+
+    font-size: 15px;
+
+    line-height: 1.8;
+}
+
+
+.history-item {
+    background: #222;
+
+    padding: 14px;
+
+    margin: 8px 0;
+
+    border-radius: 9px;
+
+    text-align: right;
+
+    line-height: 1.8;
+}
+
+
+hr {
+    border: 0;
+
+    border-top:
+        1px solid
+        #333;
+
+    margin: 25px 0;
+}
