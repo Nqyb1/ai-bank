@@ -20,7 +20,6 @@ const TRADING = [
     "TRX"
 ];
 
-
 const INVESTMENT = [
     "Microsoft",
     "Apple",
@@ -35,7 +34,7 @@ const INVESTMENT = [
 
 
 // ============================================================
-// الحالة
+// الحالة الحالية
 // ============================================================
 
 let currentType = null;
@@ -44,13 +43,24 @@ let currentAsset = null;
 
 let currentPrediction = null;
 
+let currentProbability = null;
+
 let currentPercentages = [];
+
+let currentResults = [];
 
 
 // ============================================================
-// التخزين
+// قاعدة البيانات
 //
-// لكل أصل سجل منفصل.
+// كل أصل له بيانات مستقلة.
+// مثال:
+//
+// trading::BTC
+// trading::ETH
+// investment::Microsoft
+//
+// لا يتم خلط بيانات أصل مع أصل آخر.
 // ============================================================
 
 let database =
@@ -62,7 +72,7 @@ let database =
 
 
 // ============================================================
-// حفظ البيانات
+// حفظ قاعدة البيانات
 // ============================================================
 
 function saveDatabase() {
@@ -76,7 +86,7 @@ function saveDatabase() {
 
 
 // ============================================================
-// مفتاح مستقل لكل أصل
+// مفتاح الأصل
 // ============================================================
 
 function assetKey() {
@@ -99,7 +109,6 @@ function getData() {
     const key =
         assetKey();
 
-
     if (!database[key]) {
 
         database[key] = {
@@ -113,7 +122,6 @@ function getData() {
         saveDatabase();
 
     }
-
 
     return database[key];
 
@@ -185,6 +193,8 @@ function chooseType(type) {
 
     currentType = type;
 
+    currentAsset = null;
+
     hideAll();
 
     document
@@ -193,12 +203,10 @@ function chooseType(type) {
             "hidden"
         );
 
-
     const title =
         document.getElementById(
             "assetTitle"
         );
-
 
     if (
         type === "trading"
@@ -226,7 +234,7 @@ function chooseType(type) {
 
 
 // ============================================================
-// إنشاء الأصول
+// إنشاء قائمة الأصول
 // ============================================================
 
 function createAssets(
@@ -238,9 +246,7 @@ function createAssets(
             "assetButtons"
         );
 
-
     container.innerHTML = "";
-
 
     assets.forEach(
         (asset, index) => {
@@ -250,21 +256,17 @@ function createAssets(
                     "button"
                 );
 
-
             button.className =
                 "asset";
 
-
             button.textContent =
                 `${index + 1} - ${asset}`;
-
 
             button.onclick =
                 () =>
                     chooseAsset(
                         asset
                     );
-
 
             container.appendChild(
                 button
@@ -286,9 +288,7 @@ function chooseAsset(
 
     currentAsset = asset;
 
-
     hideAll();
-
 
     document
         .getElementById("input")
@@ -296,14 +296,12 @@ function chooseAsset(
             "hidden"
         );
 
-
     document
         .getElementById(
             "selectedAsset"
         )
         .textContent =
             currentAsset;
-
 
     clearInputs();
 
@@ -316,17 +314,46 @@ function chooseAsset(
 
 function clearInputs() {
 
+    currentPercentages = [];
+
+    currentResults = [];
+
+    currentPrediction = null;
+
+    currentProbability = null;
+
     for (
         let i = 1;
         i <= 5;
         i++
     ) {
 
-        document
-            .getElementById(
+        const percentageInput =
+            document.getElementById(
                 "p" + i
-            )
-            .value = "";
+            );
+
+        if (
+            percentageInput
+        ) {
+
+            percentageInput.value = "";
+
+        }
+
+
+        const resultInput =
+            document.getElementById(
+                "r" + i
+            );
+
+        if (
+            resultInput
+        ) {
+
+            resultInput.value = "";
+
+        }
 
     }
 
@@ -334,13 +361,21 @@ function clearInputs() {
 
 
 // ============================================================
-// قراءة النسب
+// قراءة النسب + ناجح/خاسر
+//
+// النتيجة تكون بهذا الشكل:
+//
+// 33% + خاسر
+// 46% + ناجح
+//
+// من الأقدم إلى الأحدث.
 // ============================================================
 
-function readValues() {
+function readInputData() {
 
-    const values = [];
+    const percentages = [];
 
+    const results = [];
 
     for (
         let i = 1;
@@ -348,13 +383,33 @@ function readValues() {
         i++
     ) {
 
+        const percentageElement =
+            document.getElementById(
+                "p" + i
+            );
+
+        const resultElement =
+            document.getElementById(
+                "r" + i
+            );
+
+
+        if (
+            !percentageElement
+        ) {
+
+            alert(
+                `حقل النسبة رقم ${i} غير موجود.`
+            );
+
+            return null;
+
+        }
+
+
         const value =
             Number(
-                document
-                    .getElementById(
-                        "p" + i
-                    )
-                    .value
+                percentageElement.value
             );
 
 
@@ -365,7 +420,7 @@ function readValues() {
         ) {
 
             alert(
-                `النسبة رقم ${i} يجب أن تكون بين 0 و100`
+                `النسبة رقم ${i} يجب أن تكون بين 0 و100.`
             );
 
             return null;
@@ -373,31 +428,100 @@ function readValues() {
         }
 
 
-        values.push(
+        if (
+            !resultElement
+        ) {
+
+            alert(
+                `حقل نتيجة النسبة رقم ${i} غير موجود.`
+            );
+
+            return null;
+
+        }
+
+
+        const result =
+            resultElement.value;
+
+
+        if (
+            result !== "ناجح" &&
+            result !== "خاسر"
+        ) {
+
+            alert(
+                `اختر ناجح أو خاسر للنسبة رقم ${i}.`
+            );
+
+            return null;
+
+        }
+
+
+        percentages.push(
             value
+        );
+
+        results.push(
+            result
         );
 
     }
 
 
-    return values;
+    return {
+
+        percentages:
+            percentages,
+
+        results:
+            results
+
+    };
 
 }
 
 
 // ============================================================
-// تحويل البيانات إلى Features
+// تحويل ناجح/خاسر إلى رقم
 //
-// نضيف الاتجاهات والفروقات بدل استخدام الأرقام
-// الخام فقط.
+// ناجح = 1
+// خاسر = 0
+// ============================================================
+
+function resultToNumber(
+    result
+) {
+
+    return result === "ناجح"
+        ? 1
+        : 0;
+
+}
+
+
+// ============================================================
+// إنشاء Features للنموذج
+//
+// النموذج يستخدم:
+//
+// - آخر 5 نسب
+// - حالة كل نسبة
+// - المتوسط
+// - الفروقات
+// - الاتجاه العام
+//
+// المجموع = 16 Feature
 // ============================================================
 
 function makeFeatures(
-    values
+    percentages,
+    results
 ) {
 
     const average =
-        values.reduce(
+        percentages.reduce(
             (a, b) =>
                 a + b,
             0
@@ -405,20 +529,20 @@ function makeFeatures(
 
 
     const d1 =
-        values[1] -
-        values[0];
+        percentages[1] -
+        percentages[0];
 
     const d2 =
-        values[2] -
-        values[1];
+        percentages[2] -
+        percentages[1];
 
     const d3 =
-        values[3] -
-        values[2];
+        percentages[3] -
+        percentages[2];
 
     const d4 =
-        values[4] -
-        values[3];
+        percentages[4] -
+        percentages[3];
 
 
     const trend =
@@ -430,21 +554,41 @@ function makeFeatures(
         ) / 4;
 
 
+    const resultFeatures =
+        results.map(
+            result =>
+                resultToNumber(
+                    result
+                )
+        );
+
+
     return [
 
-        values[0] / 100,
-        values[1] / 100,
-        values[2] / 100,
-        values[3] / 100,
-        values[4] / 100,
+        // النسب
+        percentages[0] / 100,
+        percentages[1] / 100,
+        percentages[2] / 100,
+        percentages[3] / 100,
+        percentages[4] / 100,
 
+        // نتائج النسب السابقة
+        resultFeatures[0],
+        resultFeatures[1],
+        resultFeatures[2],
+        resultFeatures[3],
+        resultFeatures[4],
+
+        // المتوسط
         average / 100,
 
+        // الفروقات
         d1 / 100,
         d2 / 100,
         d3 / 100,
         d4 / 100,
 
+        // الاتجاه
         trend / 100
 
     ];
@@ -453,7 +597,7 @@ function makeFeatures(
 
 
 // ============================================================
-// بناء نموذج جديد
+// إنشاء نموذج Machine Learning
 // ============================================================
 
 function createModel() {
@@ -465,7 +609,7 @@ function createModel() {
     model.add(
         tf.layers.dense({
 
-            inputShape: [11],
+            inputShape: [16],
 
             units: 32,
 
@@ -512,7 +656,7 @@ function createModel() {
 
         optimizer:
             tf.train.adam(
-                0.01
+                0.005
             ),
 
         loss:
@@ -530,6 +674,41 @@ function createModel() {
 
 
 // ============================================================
+// التحقق من بيانات التدريب القديمة
+//
+// أي بيانات قديمة لا تحتوي على results
+// لن يتم استخدامها مع النموذج الجديد.
+// ============================================================
+
+function getValidModelData(
+    modelData
+) {
+
+    return modelData.filter(
+        item =>
+
+            Array.isArray(
+                item.percentages
+            ) &&
+
+            item.percentages.length === 5 &&
+
+            Array.isArray(
+                item.results
+            ) &&
+
+            item.results.length === 5 &&
+
+            (
+                item.result === "ناجح" ||
+                item.result === "خاسر"
+            )
+    );
+
+}
+
+
+// ============================================================
 // تدريب النموذج
 //
 // كل أصل يتدرب على بياناته فقط.
@@ -540,8 +719,14 @@ async function trainModel(
     modelData
 ) {
 
+    const validData =
+        getValidModelData(
+            modelData
+        );
+
+
     if (
-        modelData.length < 10
+        validData.length < 10
     ) {
 
         return null;
@@ -550,16 +735,17 @@ async function trainModel(
 
 
     const xs =
-        modelData.map(
+        validData.map(
             item =>
                 makeFeatures(
-                    item.percentages
+                    item.percentages,
+                    item.results
                 )
         );
 
 
     const ys =
-        modelData.map(
+        validData.map(
             item =>
                 item.result === "ناجح"
                     ? 1
@@ -587,12 +773,12 @@ async function trainModel(
             yTensor,
             {
 
-                epochs: 60,
+                epochs: 80,
 
                 batchSize:
                     Math.min(
                         16,
-                        modelData.length
+                        validData.length
                     ),
 
                 shuffle: true,
@@ -614,16 +800,18 @@ async function trainModel(
 
 
 // ============================================================
-// توقع
+// التوقع
 // ============================================================
 
 async function predict() {
 
-    const values =
-        readValues();
+    const inputData =
+        readInputData();
 
 
-    if (!values) {
+    if (
+        !inputData
+    ) {
 
         return;
 
@@ -631,7 +819,15 @@ async function predict() {
 
 
     currentPercentages =
-        values;
+        [
+            ...inputData.percentages
+        ];
+
+
+    currentResults =
+        [
+            ...inputData.results
+        ];
 
 
     const data =
@@ -671,17 +867,34 @@ async function predict() {
 
 
     // ========================================================
-    // نحتاج بيانات كافية قبل استخدام ML
+    // البيانات المتوفرة
+    // ========================================================
+
+    const validData =
+        getValidModelData(
+            data.modelData
+        );
+
+
+    // ========================================================
+    // قبل توفر 10 نتائج تدريبية
     // ========================================================
 
     if (
-        data.modelData.length < 10
+        validData.length < 10
     ) {
 
         currentPrediction =
             basicPrediction(
-                values
+                inputData.percentages,
+                inputData.results
             );
+
+
+        currentProbability =
+            currentPrediction === "ناجح"
+                ? 0.5
+                : 0.5;
 
 
         document
@@ -707,7 +920,7 @@ async function predict() {
                 "confidence"
             )
             .textContent =
-                "النموذج يحتاج 10 نتائج مسجلة على الأقل قبل بدء التعلم الآلي.";
+                "النموذج يحتاج إلى 10 نتائج سابقة على الأقل قبل بدء التعلم الآلي.";
 
 
         document
@@ -715,7 +928,8 @@ async function predict() {
                 "modelInfo"
             )
             .textContent =
-                `البيانات الحالية لهذا الأصل: ${data.modelData.length}`;
+                `البيانات التدريبية المتاحة لهذا الأصل: ${validData.length}`;
+
 
         return;
 
@@ -723,7 +937,7 @@ async function predict() {
 
 
     // ========================================================
-    // تدريب نموذج مستقل لهذا الأصل
+    // إنشاء نموذج مستقل لهذا الأصل
     // ========================================================
 
     const model =
@@ -732,15 +946,24 @@ async function predict() {
 
     await trainModel(
         model,
-        data.modelData
+        validData
     );
+
+
+    // ========================================================
+    // بيانات التوقع الحالية
+    // ========================================================
+
+    const features =
+        makeFeatures(
+            inputData.percentages,
+            inputData.results
+        );
 
 
     const input =
         tf.tensor2d([
-            makeFeatures(
-                values
-            )
+            features
         ]);
 
 
@@ -754,6 +977,10 @@ async function predict() {
         (
             await output.data()
         )[0];
+
+
+    currentProbability =
+        probability;
 
 
     input.dispose();
@@ -813,17 +1040,22 @@ async function predict() {
             "modelInfo"
         )
         .textContent =
-            `النموذج تدرب على ${data.modelData.length} نتيجة سابقة لهذا الأصل فقط.`;
+            `النموذج تدرب على ${validData.length} نتيجة سابقة لهذا الأصل فقط.`;
 
 }
 
 
 // ============================================================
-// توقع مبدئي قبل توفر بيانات كافية
+// توقع مبدئي
+//
+// يستخدم النسب + نتائجها السابقة.
+// هذا ليس Machine Learning.
+// يستخدم فقط حتى تتجمع 10 نتائج تدريبية.
 // ============================================================
 
 function basicPrediction(
-    values
+    values,
+    results
 ) {
 
     const average =
@@ -839,9 +1071,24 @@ function basicPrediction(
         values[0];
 
 
+    const successfulResults =
+        results.filter(
+            result =>
+                result === "ناجح"
+        ).length;
+
+
+    const failedResults =
+        results.filter(
+            result =>
+                result === "خاسر"
+        ).length;
+
+
     let score = 0;
 
 
+    // متوسط النسب
     if (
         average >= 50
     ) {
@@ -855,8 +1102,25 @@ function basicPrediction(
     }
 
 
+    // اتجاه النسب
     if (
-        values[4] >= 50
+        trend > 0
+    ) {
+
+        score++;
+
+    } else if (
+        trend < 0
+    ) {
+
+        score--;
+
+    }
+
+
+    // آخر نتيجة
+    if (
+        results[4] === "ناجح"
     ) {
 
         score++;
@@ -868,13 +1132,18 @@ function basicPrediction(
     }
 
 
+    // عدد النتائج الناجحة مقابل الخاسرة
     if (
-        trend > 0
+        successfulResults >
+        failedResults
     ) {
 
         score++;
 
-    } else {
+    } else if (
+        failedResults >
+        successfulResults
+    ) {
 
         score--;
 
@@ -889,27 +1158,71 @@ function basicPrediction(
 
 
 // ============================================================
-// تسجيل النتيجة الحقيقية
+// تسجيل النتيجة الحقيقية للتوقع
 //
-// هذه أهم خطوة في التعلم.
+// هذه هي النتيجة الخاصة بالتوقع الجديد.
+// مثال:
+//
+// التوقع = ناجح
+// النتيجة الحقيقية = خاسر
+//
+// يتم حفظها للتعلم.
 // ============================================================
 
 function recordResult(
     actual
 ) {
 
+    if (
+        !currentAsset ||
+        currentPercentages.length !== 5 ||
+        currentResults.length !== 5
+    ) {
+
+        alert(
+            "لا توجد بيانات توقع صالحة للحفظ."
+        );
+
+        return;
+
+    }
+
+
+    if (
+        actual !== "ناجح" &&
+        actual !== "خاسر"
+    ) {
+
+        return;
+
+    }
+
+
     const data =
         getData();
 
 
-    // سجل للتاريخ
+    // ========================================================
+    // سجل التاريخ
+    // ========================================================
+
     data.history.push({
 
         percentages:
-            [...currentPercentages],
+            [
+                ...currentPercentages
+            ],
+
+        results:
+            [
+                ...currentResults
+            ],
 
         prediction:
             currentPrediction,
+
+        probability:
+            currentProbability,
 
         actual:
             actual,
@@ -920,14 +1233,27 @@ function recordResult(
     });
 
 
-    // بيانات تدريب للنموذج
+    // ========================================================
+    // بيانات التدريب
+    // ========================================================
+
     data.modelData.push({
 
         percentages:
-            [...currentPercentages],
+            [
+                ...currentPercentages
+            ],
+
+        results:
+            [
+                ...currentResults
+            ],
 
         result:
-            actual
+            actual,
+
+        time:
+            new Date().toISOString()
 
     });
 
@@ -941,6 +1267,52 @@ function recordResult(
 
 
     showInput();
+
+}
+
+
+// ============================================================
+// حساب دقة النموذج
+// ============================================================
+
+function calculateAccuracy(
+    history
+) {
+
+    if (
+        !history ||
+        history.length === 0
+    ) {
+
+        return 0;
+
+    }
+
+
+    let correct = 0;
+
+
+    history.forEach(
+        item => {
+
+            if (
+                item.prediction ===
+                item.actual
+            ) {
+
+                correct++;
+
+            }
+
+        }
+    );
+
+
+    return (
+        correct /
+        history.length *
+        100
+    );
 
 }
 
@@ -996,31 +1368,22 @@ function showHistory() {
     }
 
 
-    let correct = 0;
-
-
-    data.history.forEach(
-        item => {
-
-            if (
-                item.prediction ===
-                item.actual
-            ) {
-
-                correct++;
-
-            }
-
-        }
-    );
-
+    // ========================================================
+    // الإحصائيات
+    // ========================================================
 
     const accuracy =
-        (
-            correct /
-            data.history.length *
-            100
-        ).toFixed(2);
+        calculateAccuracy(
+            data.history
+        );
+
+
+    const correct =
+        data.history.filter(
+            item =>
+                item.prediction ===
+                item.actual
+        ).length;
 
 
     const summary =
@@ -1041,7 +1404,7 @@ function showHistory() {
 
         <br>
 
-        عدد النتائج:
+        عدد التوقعات:
         ${data.history.length}
 
         <br>
@@ -1056,8 +1419,13 @@ function showHistory() {
 
         <br>
 
-        الدقة:
-        ${accuracy}%
+        دقة النموذج:
+        ${accuracy.toFixed(2)}%
+
+        <br>
+
+        البيانات التدريبية:
+        ${getValidModelData(data.modelData).length}
 
     `;
 
@@ -1066,6 +1434,10 @@ function showHistory() {
         summary
     );
 
+
+    // ========================================================
+    // النتائج السابقة
+    // ========================================================
 
     data.history
         .slice()
@@ -1083,6 +1455,22 @@ function showHistory() {
                     "history-item";
 
 
+                const percentagesText =
+                    item.percentages
+                        .map(
+                            (percentage, i) =>
+                                `${percentage}% (${item.results && item.results[i] ? item.results[i] : "غير معروف"})`
+                        )
+                        .join(
+                            " → "
+                        );
+
+
+                const isCorrect =
+                    item.prediction ===
+                    item.actual;
+
+
                 div.innerHTML = `
 
                     <strong>
@@ -1091,10 +1479,8 @@ function showHistory() {
 
                     <br>
 
-                    النسب:
-                    ${item.percentages.join(
-                        " → "
-                    )}%
+                    النسب والحالات:
+                    ${percentagesText}
 
                     <br>
 
@@ -1103,8 +1489,16 @@ function showHistory() {
 
                     <br>
 
-                    النتيجة:
+                    النتيجة الحقيقية:
                     ${item.actual}
+
+                    <br>
+
+                    حالة التوقع:
+                    ${isCorrect
+                        ? "✅ صحيح"
+                        : "❌ خطأ"
+                    }
 
                 `;
 
