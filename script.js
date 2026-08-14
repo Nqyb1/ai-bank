@@ -4,7 +4,6 @@
 // TensorFlow.js
 // ============================================================
 
-
 // ============================================================
 // القوائم
 // ============================================================
@@ -33,36 +32,25 @@ const INVESTMENT = [
     "Starbucks"
 ];
 
-
 // ============================================================
 // الإعدادات
 // ============================================================
 
 const MIN_ML_DATA = 20;
-
 const MAX_HISTORY = 500;
-
 const MAX_MODEL_DATA = 500;
-
 const TRAIN_EPOCHS = 35;
-
 
 // ============================================================
 // الحالة
 // ============================================================
 
 let currentType = null;
-
 let currentAsset = null;
-
 let currentPrediction = null;
-
 let currentProbability = null;
-
 let currentPercentages = [];
-
 let currentResults = [];
-
 
 // ============================================================
 // قاعدة البيانات
@@ -74,7 +62,6 @@ let database =
             "centralBankAI"
         )
     ) || {};
-
 
 // ============================================================
 // حفظ سريع
@@ -100,7 +87,6 @@ function saveDatabase() {
 
 }
 
-
 // ============================================================
 // مفتاح الأصل
 // ============================================================
@@ -114,7 +100,6 @@ function assetKey() {
     );
 
 }
-
 
 // ============================================================
 // بيانات الأصل
@@ -130,7 +115,6 @@ function getData() {
         database[key] = {
 
             history: [],
-
             modelData: []
 
         };
@@ -142,7 +126,6 @@ function getData() {
     return database[key];
 
 }
-
 
 // ============================================================
 // الصفحات
@@ -161,7 +144,6 @@ function hideAll() {
 
 }
 
-
 function showHome() {
 
     hideAll();
@@ -173,7 +155,6 @@ function showHome() {
         );
 
 }
-
 
 function showAssets() {
 
@@ -187,7 +168,6 @@ function showAssets() {
 
 }
 
-
 function showInput() {
 
     hideAll();
@@ -200,7 +180,6 @@ function showInput() {
 
 }
 
-
 // ============================================================
 // اختيار النظام
 // ============================================================
@@ -208,7 +187,6 @@ function showInput() {
 function chooseType(type) {
 
     currentType = type;
-
     currentAsset = null;
 
     hideAll();
@@ -247,7 +225,6 @@ function chooseType(type) {
     }
 
 }
-
 
 // ============================================================
 // إنشاء الأصول
@@ -293,7 +270,6 @@ function createAssets(
 
 }
 
-
 // ============================================================
 // اختيار الأصل
 // ============================================================
@@ -323,7 +299,6 @@ function chooseAsset(
 
 }
 
-
 // ============================================================
 // تنظيف الحقول
 // ============================================================
@@ -331,11 +306,8 @@ function chooseAsset(
 function clearInputs() {
 
     currentPercentages = [];
-
     currentResults = [];
-
     currentPrediction = null;
-
     currentProbability = null;
 
     for (
@@ -370,7 +342,6 @@ function clearInputs() {
 
 }
 
-
 // ============================================================
 // قراءة البيانات
 // ============================================================
@@ -378,7 +349,6 @@ function clearInputs() {
 function readInputData() {
 
     const percentages = [];
-
     const results = [];
 
     for (
@@ -445,25 +415,17 @@ function readInputData() {
 
         }
 
-        percentages.push(
-            value
-        );
-
-        results.push(
-            result
-        );
+        percentages.push(value);
+        results.push(result);
 
     }
 
     return {
-
         percentages,
         results
-
     };
 
 }
-
 
 // ============================================================
 // تحويل النتيجة
@@ -479,9 +441,8 @@ function resultToNumber(
 
 }
 
-
 // ============================================================
-// تحليل إحصائي
+// التحليل الإحصائي
 // ============================================================
 
 function calculateStats(
@@ -495,7 +456,6 @@ function calculateStats(
                 a + b,
             0
         ) / percentages.length;
-
 
     const changes = [];
 
@@ -512,7 +472,6 @@ function calculateStats(
 
     }
 
-
     const trend =
         changes.length
             ? changes.reduce(
@@ -523,30 +482,25 @@ function calculateStats(
             changes.length
             : 0;
 
-
     const positiveChanges =
         changes.filter(
             x => x > 0
         ).length;
-
 
     const negativeChanges =
         changes.filter(
             x => x < 0
         ).length;
 
-
     const successful =
         results.filter(
             x => x === "ناجح"
         ).length;
 
-
     const failed =
         results.filter(
             x => x === "خاسر"
         ).length;
-
 
     const successRate =
         successful /
@@ -555,27 +509,19 @@ function calculateStats(
             1
         );
 
-
     return {
 
         average,
-
         trend,
-
         positiveChanges,
-
         negativeChanges,
-
         successful,
-
         failed,
-
         successRate
 
     };
 
 }
-
 
 // ============================================================
 // Features
@@ -592,9 +538,7 @@ function makeFeatures(
             results
         );
 
-
     const features = [];
-
 
     percentages.forEach(
         value => {
@@ -605,7 +549,6 @@ function makeFeatures(
 
         }
     );
-
 
     results.forEach(
         result => {
@@ -619,11 +562,9 @@ function makeFeatures(
         }
     );
 
-
     features.push(
         stats.average / 100
     );
-
 
     features.push(
         Math.max(
@@ -635,28 +576,23 @@ function makeFeatures(
         )
     );
 
-
     features.push(
         stats.positiveChanges /
         4
     );
-
 
     features.push(
         stats.negativeChanges /
         4
     );
 
-
     features.push(
         stats.successRate
     );
 
-
     return features;
 
 }
-
 
 // ============================================================
 // إنشاء النموذج
@@ -667,19 +603,15 @@ function createModel() {
     const model =
         tf.sequential();
 
-
     model.add(
         tf.layers.dense({
 
             inputShape: [20],
-
             units: 32,
-
             activation: "relu"
 
         })
     );
-
 
     model.add(
         tf.layers.dropout({
@@ -689,39 +621,32 @@ function createModel() {
         })
     );
 
-
     model.add(
         tf.layers.dense({
 
             units: 16,
-
             activation: "relu"
 
         })
     );
-
 
     model.add(
         tf.layers.dense({
 
             units: 8,
-
             activation: "relu"
 
         })
     );
 
-
     model.add(
         tf.layers.dense({
 
             units: 1,
-
             activation: "sigmoid"
 
         })
     );
-
 
     model.compile({
 
@@ -740,11 +665,9 @@ function createModel() {
 
     });
 
-
     return model;
 
 }
-
 
 // ============================================================
 // التحقق من البيانات
@@ -777,7 +700,6 @@ function getValidModelData(
 
 }
 
-
 // ============================================================
 // تدريب النموذج
 // ============================================================
@@ -792,7 +714,6 @@ async function trainModel(
             modelData
         );
 
-
     if (
         validData.length < MIN_ML_DATA
     ) {
@@ -800,7 +721,6 @@ async function trainModel(
         return null;
 
     }
-
 
     const xs =
         validData.map(
@@ -811,7 +731,6 @@ async function trainModel(
                 )
         );
 
-
     const ys =
         validData.map(
             item =>
@@ -820,12 +739,10 @@ async function trainModel(
                     : 0
         );
 
-
     const xTensor =
         tf.tensor2d(
             xs
         );
-
 
     const yTensor =
         tf.tensor2d(
@@ -833,7 +750,6 @@ async function trainModel(
                 x => [x]
             )
         );
-
 
     const result =
         await model.fit(
@@ -859,16 +775,12 @@ async function trainModel(
             }
         );
 
-
     xTensor.dispose();
-
     yTensor.dispose();
-
 
     return result;
 
 }
-
 
 // ============================================================
 // تحليل الأنماط السابقة
@@ -885,7 +797,6 @@ function patternPrediction(
             modelData
         );
 
-
     if (
         validData.length === 0
     ) {
@@ -894,16 +805,13 @@ function patternPrediction(
 
     }
 
-
     const currentFeatures =
         makeFeatures(
             currentPercentages,
             currentResults
         );
 
-
     const scores = [];
-
 
     validData.forEach(
         item => {
@@ -914,9 +822,7 @@ function patternPrediction(
                     item.results
                 );
 
-
             let distance = 0;
-
 
             for (
                 let i = 0;
@@ -933,12 +839,10 @@ function patternPrediction(
 
             }
 
-
             distance =
                 Math.sqrt(
                     distance
                 );
-
 
             const similarity =
                 1 /
@@ -946,7 +850,6 @@ function patternPrediction(
                     1 +
                     distance * 5
                 );
-
 
             scores.push({
 
@@ -962,13 +865,11 @@ function patternPrediction(
         }
     );
 
-
     scores.sort(
         (a, b) =>
             b.similarity -
             a.similarity
     );
-
 
     const nearest =
         scores.slice(
@@ -979,11 +880,8 @@ function patternPrediction(
             )
         );
 
-
     let weightedSuccess = 0;
-
     let totalWeight = 0;
-
 
     nearest.forEach(
         item => {
@@ -998,7 +896,6 @@ function patternPrediction(
         }
     );
 
-
     if (
         totalWeight === 0
     ) {
@@ -1007,14 +904,12 @@ function patternPrediction(
 
     }
 
-
     return (
         weightedSuccess /
         totalWeight
     );
 
 }
-
 
 // ============================================================
 // التحليل الإحصائي
@@ -1031,16 +926,13 @@ function statisticalPrediction(
             results
         );
 
-
     let score = 0;
-
 
     score +=
         (
             stats.successRate -
             0.5
         ) * 0.35;
-
 
     const trendScore =
         Math.max(
@@ -1051,21 +943,17 @@ function statisticalPrediction(
             )
         );
 
-
     score +=
         trendScore * 0.20;
 
-
     const lastPercentage =
         percentages[4] / 100;
-
 
     score +=
         (
             lastPercentage -
             0.5
         ) * 0.20;
-
 
     const range =
         Math.max(
@@ -1074,7 +962,6 @@ function statisticalPrediction(
         Math.min(
             ...percentages
         );
-
 
     if (
         range < 10
@@ -1085,11 +972,8 @@ function statisticalPrediction(
 
     }
 
-
     let recentWeight = 0;
-
     let recentTotal = 0;
-
 
     for (
         let i = 0;
@@ -1111,18 +995,15 @@ function statisticalPrediction(
 
     }
 
-
     const recentRate =
         recentWeight /
         recentTotal;
-
 
     score +=
         (
             recentRate -
             0.5
         ) * 0.20;
-
 
     return Math.max(
         0,
@@ -1133,7 +1014,6 @@ function statisticalPrediction(
     );
 
 }
-
 
 // ============================================================
 // التوقع الكامل
@@ -1150,13 +1030,11 @@ async function generatePrediction(
             data.modelData
         );
 
-
     const statistical =
         statisticalPrediction(
             percentages,
             results
         );
-
 
     const pattern =
         patternPrediction(
@@ -1165,10 +1043,8 @@ async function generatePrediction(
             validData
         );
 
-
     let mlProbability =
         0.5;
-
 
     if (
         validData.length >= MIN_ML_DATA
@@ -1177,7 +1053,6 @@ async function generatePrediction(
         const model =
             createModel();
 
-
         try {
 
             await trainModel(
@@ -1185,34 +1060,28 @@ async function generatePrediction(
                 validData
             );
 
-
             const features =
                 makeFeatures(
                     percentages,
                     results
                 );
 
-
             const input =
                 tf.tensor2d([
                     features
                 ]);
-
 
             const output =
                 model.predict(
                     input
                 );
 
-
             mlProbability =
                 (
                     await output.data()
                 )[0];
 
-
             input.dispose();
-
             output.dispose();
 
         } catch (error) {
@@ -1224,14 +1093,11 @@ async function generatePrediction(
 
         }
 
-
         model.dispose();
 
     }
 
-
     let probability;
-
 
     if (
         validData.length >= MIN_ML_DATA
@@ -1260,20 +1126,17 @@ async function generatePrediction(
 
     }
 
-
     const dataFactor =
         Math.min(
             validData.length / 60,
             1
         );
 
-
     const distanceFromMiddle =
         Math.abs(
             probability -
             0.5
         );
-
 
     const confidence =
         50 +
@@ -1286,13 +1149,10 @@ async function generatePrediction(
             )
         );
 
-
     return {
 
         probability,
-
         confidence,
-
         mlProbability,
 
         patternProbability:
@@ -1308,7 +1168,6 @@ async function generatePrediction(
 
 }
 
-
 // ============================================================
 // التوقع
 // ============================================================
@@ -1318,7 +1177,6 @@ async function predict() {
     const inputData =
         readInputData();
 
-
     if (
         !inputData
     ) {
@@ -1327,32 +1185,26 @@ async function predict() {
 
     }
 
-
     currentPercentages =
         [
             ...inputData.percentages
         ];
-
 
     currentResults =
         [
             ...inputData.results
         ];
 
-
     const data =
         getData();
 
-
     hideAll();
-
 
     document
         .getElementById("result")
         .classList.remove(
             "hidden"
         );
-
 
     document
         .getElementById(
@@ -1361,14 +1213,12 @@ async function predict() {
         .textContent =
             "جاري التحليل المتقدم...";
 
-
     document
         .getElementById(
             "confidence"
         )
         .textContent =
             "";
-
 
     document
         .getElementById(
@@ -1377,7 +1227,6 @@ async function predict() {
         .textContent =
             "";
 
-
     const result =
         await generatePrediction(
             inputData.percentages,
@@ -1385,22 +1234,18 @@ async function predict() {
             data
         );
 
-
     currentProbability =
         result.probability;
-
 
     currentPrediction =
         result.probability >= 0.5
             ? "ناجح"
             : "خاسر";
 
-
     const confidence =
         result.confidence.toFixed(
             1
         );
-
 
     document
         .getElementById(
@@ -1408,7 +1253,6 @@ async function predict() {
         )
         .textContent =
             `التوقع: ${currentPrediction}`;
-
 
     document
         .getElementById(
@@ -1419,14 +1263,12 @@ async function predict() {
                 ? "win"
                 : "loss";
 
-
     document
         .getElementById(
             "confidence"
         )
         .textContent =
             `ثقة التحليل: ${confidence}%`;
-
 
     document
         .getElementById(
@@ -1440,7 +1282,6 @@ async function predict() {
                 : `البيانات التدريبية: ${result.dataCount} / ${MIN_ML_DATA} — التعلم الآلي الكامل لم يبدأ بعد.`;
 
 }
-
 
 // ============================================================
 // تسجيل النتيجة
@@ -1465,7 +1306,6 @@ function recordResult(
 
     }
 
-
     if (
         actual !== "ناجح" &&
         actual !== "خاسر"
@@ -1475,14 +1315,11 @@ function recordResult(
 
     }
 
-
     const data =
         getData();
 
-
     const now =
         new Date().toISOString();
-
 
     data.history.push({
 
@@ -1510,7 +1347,6 @@ function recordResult(
 
     });
 
-
     data.modelData.push({
 
         percentages:
@@ -1531,7 +1367,6 @@ function recordResult(
 
     });
 
-
     if (
         data.history.length >
         MAX_HISTORY
@@ -1543,7 +1378,6 @@ function recordResult(
             );
 
     }
-
 
     if (
         data.modelData.length >
@@ -1557,19 +1391,15 @@ function recordResult(
 
     }
 
-
     saveDatabase();
-
 
     alert(
         "تم حفظ النتيجة فورًا وإضافتها إلى بيانات التعلم."
     );
 
-
     showInput();
 
 }
-
 
 // ============================================================
 // تعديل نتيجة محفوظة
@@ -1581,7 +1411,6 @@ function editHistoryItem(
 
     const data =
         getData();
-
 
     if (
         !data.history ||
@@ -1596,19 +1425,16 @@ function editHistoryItem(
 
     }
 
-
     const item =
         data.history[
             historyIndex
         ];
-
 
     const newActual =
         prompt(
             "اكتب النتيجة الصحيحة:\n\nناجح\nخاسر",
             item.actual
         );
-
 
     if (
         newActual !== "ناجح" &&
@@ -1623,18 +1449,8 @@ function editHistoryItem(
 
     }
 
-
-    // ========================================================
-    // تعديل النتيجة الحقيقية
-    // ========================================================
-
     item.actual =
         newActual;
-
-
-    // ========================================================
-    // تحديث بيانات التعلم
-    // ========================================================
 
     if (
         data.modelData &&
@@ -1648,23 +1464,77 @@ function editHistoryItem(
 
     }
 
-
-    // ========================================================
-    // حفظ التعديل فورًا
-    // ========================================================
-
     saveDatabase();
-
 
     alert(
         "تم تعديل النتيجة وحفظها وتحديث بيانات التعلم بنجاح."
     );
 
-
     showHistory();
 
 }
 
+// ============================================================
+// حذف توقع محفوظ
+// ============================================================
+
+function deleteHistoryItem(
+    historyIndex
+) {
+
+    const data =
+        getData();
+
+    if (
+        !data.history ||
+        !data.history[historyIndex]
+    ) {
+
+        alert(
+            "التوقع غير موجود."
+        );
+
+        return;
+
+    }
+
+    const confirmed =
+        confirm(
+            "⚠️ هل أنت متأكد من حذف هذا التوقع؟\n\nسيتم حذفه أيضًا من بيانات التعلم."
+        );
+
+    if (!confirmed) {
+
+        return;
+
+    }
+
+    data.history.splice(
+        historyIndex,
+        1
+    );
+
+    if (
+        data.modelData &&
+        data.modelData[historyIndex]
+    ) {
+
+        data.modelData.splice(
+            historyIndex,
+            1
+        );
+
+    }
+
+    saveDatabase();
+
+    alert(
+        "تم حذف التوقع وتحديث بيانات التعلم."
+    );
+
+    showHistory();
+
+}
 
 // ============================================================
 // دقة التوقعات
@@ -1683,9 +1553,7 @@ function calculateAccuracy(
 
     }
 
-
     let correct = 0;
-
 
     history.forEach(
         item => {
@@ -1702,14 +1570,12 @@ function calculateAccuracy(
         }
     );
 
-
     return (
         correct /
         history.length
     ) * 100;
 
 }
-
 
 // ============================================================
 // عرض السجل
@@ -1720,9 +1586,7 @@ function showHistory() {
     const data =
         getData();
 
-
     hideAll();
-
 
     document
         .getElementById(
@@ -1732,7 +1596,6 @@ function showHistory() {
             "hidden"
         );
 
-
     document
         .getElementById(
             "historyAsset"
@@ -1740,15 +1603,12 @@ function showHistory() {
         .textContent =
             currentAsset;
 
-
     const list =
         document.getElementById(
             "historyList"
         );
 
-
     list.innerHTML = "";
-
 
     if (
         data.history.length === 0
@@ -1761,18 +1621,15 @@ function showHistory() {
 
     }
 
-
     const validData =
         getValidModelData(
             data.modelData
         );
 
-
     const accuracy =
         calculateAccuracy(
             data.history
         );
-
 
     const correct =
         data.history.filter(
@@ -1781,16 +1638,13 @@ function showHistory() {
                 item.actual
         ).length;
 
-
     const summary =
         document.createElement(
             "div"
         );
 
-
     summary.className =
         "history-item";
-
 
     summary.innerHTML = `
 
@@ -1825,15 +1679,9 @@ function showHistory() {
 
     `;
 
-
     list.appendChild(
         summary
     );
-
-
-    // ========================================================
-    // عرض النتائج + زر التعديل
-    // ========================================================
 
     data.history
         .slice()
@@ -1846,16 +1694,13 @@ function showHistory() {
                     1 -
                     index;
 
-
                 const div =
                     document.createElement(
                         "div"
                     );
 
-
                 div.className =
                     "history-item";
-
 
                 const percentagesText =
                     item.percentages
@@ -1879,11 +1724,9 @@ function showHistory() {
                             " → "
                         );
 
-
                 const isCorrect =
                     item.prediction ===
                     item.actual;
-
 
                 const probabilityText =
                     typeof item.probability ===
@@ -1895,7 +1738,6 @@ function showHistory() {
                         ).toFixed(1)}%`
 
                         : "غير متوفر";
-
 
                 div.innerHTML = `
 
@@ -1940,8 +1782,13 @@ function showHistory() {
                         ✏️ تعديل النتيجة
                     </button>
 
-                `;
+                    <button
+                        onclick="deleteHistoryItem(${originalIndex})"
+                    >
+                        🗑️ حذف التوقع
+                    </button>
 
+                `;
 
                 list.appendChild(
                     div
@@ -1951,7 +1798,6 @@ function showHistory() {
         );
 
 }
-
 
 // ============================================================
 // البداية
