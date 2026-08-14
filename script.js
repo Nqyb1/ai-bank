@@ -596,7 +596,6 @@ function makeFeatures(
     const features = [];
 
 
-    // النسب
     percentages.forEach(
         value => {
 
@@ -608,7 +607,6 @@ function makeFeatures(
     );
 
 
-    // النتائج
     results.forEach(
         result => {
 
@@ -622,13 +620,11 @@ function makeFeatures(
     );
 
 
-    // المتوسط
     features.push(
         stats.average / 100
     );
 
 
-    // الاتجاه
     features.push(
         Math.max(
             -1,
@@ -640,21 +636,18 @@ function makeFeatures(
     );
 
 
-    // عدد التغيرات الإيجابية
     features.push(
         stats.positiveChanges /
         4
     );
 
 
-    // عدد التغيرات السلبية
     features.push(
         stats.negativeChanges /
         4
     );
 
 
-    // معدل النجاح
     features.push(
         stats.successRate
     );
@@ -977,7 +970,6 @@ function patternPrediction(
     );
 
 
-    // أفضل الأنماط المشابهة
     const nearest =
         scores.slice(
             0,
@@ -1043,7 +1035,6 @@ function statisticalPrediction(
     let score = 0;
 
 
-    // معدل النجاح التاريخي
     score +=
         (
             stats.successRate -
@@ -1051,7 +1042,6 @@ function statisticalPrediction(
         ) * 0.35;
 
 
-    // الاتجاه
     const trendScore =
         Math.max(
             -1,
@@ -1066,7 +1056,6 @@ function statisticalPrediction(
         trendScore * 0.20;
 
 
-    // آخر نسبة
     const lastPercentage =
         percentages[4] / 100;
 
@@ -1078,7 +1067,6 @@ function statisticalPrediction(
         ) * 0.20;
 
 
-    // الاستقرار
     const range =
         Math.max(
             ...percentages
@@ -1098,7 +1086,6 @@ function statisticalPrediction(
     }
 
 
-    // النتائج المتسلسلة
     let recentWeight = 0;
 
     let recentTotal = 0;
@@ -1164,7 +1151,6 @@ async function generatePrediction(
         );
 
 
-    // التحليل الإحصائي
     const statistical =
         statisticalPrediction(
             percentages,
@@ -1172,7 +1158,6 @@ async function generatePrediction(
         );
 
 
-    // تحليل الأنماط
     const pattern =
         patternPrediction(
             percentages,
@@ -1184,10 +1169,6 @@ async function generatePrediction(
     let mlProbability =
         0.5;
 
-
-    // ========================================================
-    // TensorFlow بعد توفر بيانات كافية
-    // ========================================================
 
     if (
         validData.length >= MIN_ML_DATA
@@ -1249,10 +1230,6 @@ async function generatePrediction(
     }
 
 
-    // ========================================================
-    // دمج النماذج
-    // ========================================================
-
     let probability;
 
 
@@ -1283,10 +1260,6 @@ async function generatePrediction(
 
     }
 
-
-    // ========================================================
-    // منع الثقة الوهمية
-    // ========================================================
 
     const dataFactor =
         Math.min(
@@ -1405,10 +1378,6 @@ async function predict() {
             "";
 
 
-    // ========================================================
-    // حساب التوقع
-    // ========================================================
-
     const result =
         await generatePrediction(
             inputData.percentages,
@@ -1515,10 +1484,6 @@ function recordResult(
         new Date().toISOString();
 
 
-    // ========================================================
-    // التاريخ
-    // ========================================================
-
     data.history.push({
 
         percentages:
@@ -1546,10 +1511,6 @@ function recordResult(
     });
 
 
-    // ========================================================
-    // بيانات التعلم
-    // ========================================================
-
     data.modelData.push({
 
         percentages:
@@ -1570,10 +1531,6 @@ function recordResult(
 
     });
 
-
-    // ========================================================
-    // منع تضخم قاعدة البيانات
-    // ========================================================
 
     if (
         data.history.length >
@@ -1601,10 +1558,6 @@ function recordResult(
     }
 
 
-    // ========================================================
-    // حفظ فوري
-    // ========================================================
-
     saveDatabase();
 
 
@@ -1614,6 +1567,101 @@ function recordResult(
 
 
     showInput();
+
+}
+
+
+// ============================================================
+// تعديل نتيجة محفوظة
+// ============================================================
+
+function editHistoryItem(
+    historyIndex
+) {
+
+    const data =
+        getData();
+
+
+    if (
+        !data.history ||
+        !data.history[historyIndex]
+    ) {
+
+        alert(
+            "النتيجة غير موجودة."
+        );
+
+        return;
+
+    }
+
+
+    const item =
+        data.history[
+            historyIndex
+        ];
+
+
+    const newActual =
+        prompt(
+            "اكتب النتيجة الصحيحة:\n\nناجح\nخاسر",
+            item.actual
+        );
+
+
+    if (
+        newActual !== "ناجح" &&
+        newActual !== "خاسر"
+    ) {
+
+        alert(
+            "يجب كتابة ناجح أو خاسر."
+        );
+
+        return;
+
+    }
+
+
+    // ========================================================
+    // تعديل النتيجة الحقيقية
+    // ========================================================
+
+    item.actual =
+        newActual;
+
+
+    // ========================================================
+    // تحديث بيانات التعلم
+    // ========================================================
+
+    if (
+        data.modelData &&
+        data.modelData[historyIndex]
+    ) {
+
+        data.modelData[
+            historyIndex
+        ].result =
+            newActual;
+
+    }
+
+
+    // ========================================================
+    // حفظ التعديل فورًا
+    // ========================================================
+
+    saveDatabase();
+
+
+    alert(
+        "تم تعديل النتيجة وحفظها وتحديث بيانات التعلم بنجاح."
+    );
+
+
+    showHistory();
 
 }
 
@@ -1783,11 +1831,21 @@ function showHistory() {
     );
 
 
+    // ========================================================
+    // عرض النتائج + زر التعديل
+    // ========================================================
+
     data.history
         .slice()
         .reverse()
         .forEach(
             (item, index) => {
+
+                const originalIndex =
+                    data.history.length -
+                    1 -
+                    index;
+
 
                 const div =
                     document.createElement(
@@ -1873,6 +1931,14 @@ function showHistory() {
                             ? "✅ صحيح"
                             : "❌ خطأ"
                     }
+
+                    <br><br>
+
+                    <button
+                        onclick="editHistoryItem(${originalIndex})"
+                    >
+                        ✏️ تعديل النتيجة
+                    </button>
 
                 `;
 
