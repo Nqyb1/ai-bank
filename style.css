@@ -1,4 +1,5 @@
-/* ============================================================
+/* 
+============================================================
    CENTRAL BANK AI
    Royal Black & Gold Theme
    ============================================================ */
@@ -11,17 +12,23 @@
     --black: #050505;
     --black-2: #0b0b0b;
     --black-3: #111111;
-    --gold: #d4af37;
-    --gold-light: #f4d675;
-    --gold-dark: #8f6d16;
+
+    /* ذهب أخف وأهدأ */
+    --gold: #b8952f;
+    --gold-light: #d6bd68;
+    --gold-dark: #765d17;
+
     --text: #f5f5f5;
     --muted: #aaa;
-    --border: rgba(212, 175, 55, 0.28);
+
+    /* حدود ذهبية خفيفة */
+    --border: rgba(184, 149, 47, 0.18);
 }
 
 body {
     margin: 0;
     min-height: 100vh;
+
     font-family: Arial, Tahoma, sans-serif;
     direction: rtl;
 
@@ -30,12 +37,12 @@ body {
     background:
         radial-gradient(
             circle at 50% -10%,
-            rgba(212, 175, 55, 0.14),
+            rgba(184, 149, 47, 0.08),
             transparent 38%
         ),
         radial-gradient(
             circle at 0% 100%,
-            rgba(212, 175, 55, 0.06),
+            rgba(184, 149, 47, 0.035),
             transparent 35%
         ),
         linear-gradient(
@@ -55,7 +62,9 @@ body {
 
 .container {
     width: min(92%, 700px);
+
     margin: 40px auto;
+
     padding: 30px 24px;
 
     background:
@@ -65,12 +74,14 @@ body {
             rgba(5, 5, 5, 0.98)
         );
 
-    border: 1px solid var(--border);
+    /* خط رفيع */
+    border: 1px solid rgba(184, 149, 47, 0.18);
+
     border-radius: 24px;
 
     box-shadow:
         0 25px 80px rgba(0, 0, 0, 0.75),
-        0 0 35px rgba(212, 175, 55, 0.06);
+        0 0 35px rgba(184, 149, 47, 0.025);
 }
 
 
@@ -84,13 +95,15 @@ h1 {
     text-align: center;
 
     font-size: 38px;
+
     font-weight: 900;
+
     letter-spacing: 1px;
 
     color: var(--gold-light);
 
     text-shadow:
-        0 0 12px rgba(212, 175, 55, 0.3);
+        0 0 8px rgba(184, 149, 47, 0.16);
 }
 
 h2 {
@@ -103,6 +116,7 @@ h2 {
 
 h3 {
     text-align: center;
+
     color: var(--gold);
 }
 
@@ -113,6 +127,7 @@ h3 {
 
 p {
     color: #d0d0d0;
+
     text-align: center;
 }
 
@@ -122,6 +137,7 @@ label {
     margin: 12px 0 6px;
 
     color: var(--gold-light);
+
     font-weight: bold;
 }
 
@@ -137,7 +153,9 @@ button {
 
     margin: 8px 0;
 
-    border: 1px solid rgba(212, 175, 55, 0.35);
+    /* خط رفيع وذهبي خفيف */
+    border: 1px solid rgba(184, 149, 47, 0.22);
+
     border-radius: 14px;
 
     background:
@@ -150,6 +168,7 @@ button {
     color: #f5f5f5;
 
     font-size: 16px;
+
     font-weight: 700;
 
     cursor: pointer;
@@ -165,13 +184,13 @@ button {
 button:hover {
     transform: translateY(-2px);
 
-    border-color: var(--gold);
+    border-color: rgba(184, 149, 47, 0.55);
 
     color: var(--gold-light);
 
     box-shadow:
         0 8px 25px rgba(0, 0, 0, 0.5),
-        0 0 18px rgba(212, 175, 55, 0.12);
+        0 0 12px rgba(184, 149, 47, 0.06);
 }
 
 button:active {
@@ -184,14 +203,14 @@ button:active {
    ============================================================ */
 
 #home button {
-    border-color: rgba(212, 175, 55, 0.45);
+    border-color: rgba(184, 149, 47, 0.25);
 }
 
 #home button:first-of-type {
     background:
         linear-gradient(
             135deg,
-            #1a1507,
+            #151207,
             #0b0b0b
         );
 }
@@ -215,7 +234,7 @@ button:active {
             #080808
         );
 
-    border: 1px solid rgba(212, 175, 55, 0.25);
+    border: 1px solid rgba(184, 149, 47, 0.18);
 }
 
 .asset::before {
@@ -224,34 +243,37 @@ button:active {
     position: absolute;
 
     top: 0;
+
     right: 0;
 
-    width: 3px;
+    /* الخط أصبح أرفع */
+    width: 2px;
+
     height: 100%;
 
     background:
         linear-gradient(
             to bottom,
             transparent,
-            var(--gold),
+            rgba(184, 149, 47, 0.65),
             transparent
         );
 
-    opacity: 0.7;
+    opacity: 0.5;
 }
 
 .asset:hover {
     background:
         linear-gradient(
             145deg,
-            #1a180f,
+            #18170f,
             #0b0b0b
         );
 
-    border-color: var(--gold);
+    border-color: rgba(184, 149, 47, 0.5);
 
     box-shadow:
-        0 0 20px rgba(212, 175, 55, 0.12);
+        0 0 15px rgba(184, 149, 47, 0.06);
 }
 
 
@@ -268,7 +290,7 @@ input {
 
     border-radius: 12px;
 
-    border: 1px solid rgba(212, 175, 55, 0.25);
+    border: 1px solid rgba(184, 149, 47, 0.18);
 
     outline: none;
 
@@ -279,6 +301,7 @@ input {
     text-align: center;
 
     font-size: 18px;
+
     font-weight: bold;
 
     transition:
@@ -287,10 +310,10 @@ input {
 }
 
 input:focus {
-    border-color: var(--gold);
+    border-color: rgba(184, 149, 47, 0.55);
 
     box-shadow:
-        0 0 15px rgba(212, 175, 55, 0.12);
+        0 0 12px rgba(184, 149, 47, 0.07);
 }
 
 input::placeholder {
@@ -309,8 +332,8 @@ button[onclick*="predict"] {
     background:
         linear-gradient(
             135deg,
-            #d4af37,
-            #a98220
+            #b8952f,
+            #866b1b
         );
 
     color: #050505;
@@ -320,7 +343,7 @@ button[onclick*="predict"] {
     font-weight: 900;
 
     box-shadow:
-        0 8px 25px rgba(212, 175, 55, 0.18);
+        0 8px 25px rgba(184, 149, 47, 0.10);
 }
 
 #predict:hover,
@@ -328,14 +351,14 @@ button[onclick*="predict"]:hover {
     background:
         linear-gradient(
             135deg,
-            #f4d675,
-            #c59d2d
+            #d6bd68,
+            #a98625
         );
 
     color: #050505;
 
     box-shadow:
-        0 10px 35px rgba(212, 175, 55, 0.28);
+        0 10px 30px rgba(184, 149, 47, 0.16);
 }
 
 
@@ -353,28 +376,29 @@ button[onclick*="predict"]:hover {
     text-align: center;
 
     font-size: 28px;
+
     font-weight: 900;
 
     background: #090909;
 
-    border: 1px solid var(--border);
+    border: 1px solid rgba(184, 149, 47, 0.18);
 }
 
 .win {
-    color: #e5c75a !important;
+    color: #d1b85c !important;
 
     border-color:
-        rgba(212, 175, 55, 0.65) !important;
+        rgba(184, 149, 47, 0.42) !important;
 
     box-shadow:
-        0 0 25px rgba(212, 175, 55, 0.12);
+        0 0 18px rgba(184, 149, 47, 0.06);
 }
 
 .loss {
     color: #d8d8d8 !important;
 
     border-color:
-        rgba(150, 150, 150, 0.35) !important;
+        rgba(150, 150, 150, 0.25) !important;
 }
 
 
@@ -388,6 +412,7 @@ button[onclick*="predict"]:hover {
     color: var(--gold-light);
 
     font-size: 18px;
+
     font-weight: bold;
 
     margin: 12px 0;
@@ -418,7 +443,7 @@ button[onclick*="predict"]:hover {
             #080808
         );
 
-    border: 1px solid rgba(212, 175, 55, 0.2);
+    border: 1px solid rgba(184, 149, 47, 0.16);
 
     border-radius: 16px;
 
@@ -454,7 +479,28 @@ button[onclick*="showInput"]:hover {
     color: var(--gold-light);
 
     border-color:
-        rgba(212, 175, 55, 0.35);
+        rgba(184, 149, 47, 0.28);
+}
+
+
+/* ============================================================
+   From Nqyb
+   ============================================================ */
+
+.from-nqyb {
+    margin-top: 24px;
+
+    text-align: center;
+
+    font-size: 11px;
+
+    font-weight: 500;
+
+    letter-spacing: 1px;
+
+    color: rgba(184, 149, 47, 0.65);
+
+    opacity: 0.75;
 }
 
 
@@ -482,11 +528,11 @@ hr {
         linear-gradient(
             to right,
             transparent,
-            var(--gold),
+            rgba(184, 149, 47, 0.55),
             transparent
         );
 
-    opacity: 0.5;
+    opacity: 0.35;
 }
 
 
@@ -503,13 +549,13 @@ hr {
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #6f5718;
+    background: #5f4b17;
 
     border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: var(--gold);
+    background: #9a7c27;
 }
 
 
@@ -547,6 +593,11 @@ hr {
 
     #prediction {
         font-size: 23px;
+    }
+
+    .from-nqyb {
+        font-size: 10px;
+        margin-top: 20px;
     }
 
 }
